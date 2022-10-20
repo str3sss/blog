@@ -69,8 +69,10 @@ export function ArticlePage({ userData }) {
     return <NotFoundPage />
   }
 
-  if (isLoading) return null
-  console.log(userData)
+  if (isLoading) {
+    return null
+  }
+
   return (
     <div className="article article_detail">
       <div className="h6 article_detail__header">{article.title}</div>
