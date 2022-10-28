@@ -1,12 +1,12 @@
 import { Button } from 'antd'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateArticleMutation } from '../redux/BlogAPI'
 import { getToken } from '../utils/StorageHandler'
+import { createArticleSchema } from '../forms'
 
 export function CreateArticlePage() {
   const [tagList, setTagList] = useState([])
@@ -14,18 +14,12 @@ export function CreateArticlePage() {
   const navigate = useNavigate()
   const token = getToken()
 
-  const formSchema = Yup.object({
-    title: Yup.string().trim().required('Title is Required'),
-    description: Yup.string().trim().required('Description is Required'),
-    body: Yup.string().trim().required('Body is Required'),
-  })
-
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(formSchema),
+    resolver: yupResolver(createArticleSchema),
     mode: 'all',
   })
 

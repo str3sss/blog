@@ -1,12 +1,12 @@
 import { Button } from 'antd'
 import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import { useEditArticleMutation, useGetArticleQuery } from '../redux/BlogAPI'
 import { getToken } from '../utils/StorageHandler'
+import { editArticleSchema } from '../forms'
 
 export function EditArticlePage({ userData }) {
   const slug = useParams().slug
@@ -23,18 +23,12 @@ export function EditArticlePage({ userData }) {
     }
   }, [article])
 
-  const formSchema = Yup.object({
-    title: Yup.string().trim().required('Title is Required'),
-    description: Yup.string().trim().required('Description is Required'),
-    body: Yup.string().trim().required('Body is Required'),
-  })
-
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(formSchema),
+    resolver: yupResolver(editArticleSchema),
     mode: 'all',
   })
 

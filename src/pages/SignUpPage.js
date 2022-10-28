@@ -2,32 +2,15 @@ import { Divider, Button, Checkbox } from 'antd'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useRegisterUserMutation } from '../redux/BlogAPI'
 import { setToken } from '../utils/StorageHandler'
+import { signUpSchema } from '../forms'
 
 export function SignUpPage() {
   const [checked, setChecked] = useState(false)
   const navigate = useNavigate()
-
-  const formSchema = Yup.object({
-    username: Yup.string()
-      .required('Username is required')
-      .min(3, 'Username length should be at least 3 characters')
-      .max(20, 'Username cannot exceed more than 20 characters'),
-    email: Yup.string().email().required('Email is required'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password length should be at least 4 characters')
-      .max(40, 'Password cannot exceed more than 12 characters'),
-    cpassword: Yup.string()
-      .required('Confirm Password is required')
-      .min(6, 'Password length should be at least 6 characters')
-      .max(40, 'Password cannot exceed more than 40 characters')
-      .oneOf([Yup.ref('password')], 'Passwords do not match'),
-  }).required()
 
   const {
     register,
@@ -35,7 +18,7 @@ export function SignUpPage() {
     handleSubmit,
   } = useForm({
     mode: 'all',
-    resolver: yupResolver(formSchema),
+    resolver: yupResolver(signUpSchema),
   })
 
   const [registerUser, { isError }] = useRegisterUserMutation()

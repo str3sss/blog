@@ -18,7 +18,6 @@ export function BlogPage() {
   const token = getToken()
 
   if (isLoading) {
-    console.log('загрузка')
     return (
       <ul>
         <div className="skeleton" />

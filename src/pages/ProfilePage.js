@@ -1,43 +1,22 @@
 import { Button } from 'antd'
 import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
 
 import { useUpdateUserMutation } from '../redux/BlogAPI'
 import { getToken } from '../utils/StorageHandler'
+import { profileSchema } from '../forms'
 
 export function ProfilePage() {
   const navigate = useNavigate()
   const [updateUser, { isError }] = useUpdateUserMutation()
-
-  const formSchema = Yup.object({
-    username: Yup.string()
-      .transform((value) => (value === '' ? null : value))
-      .nullable()
-      .min(3, 'Username length should be at least 3 characters')
-      .max(20, 'Username cannot exceed more than 20 characters'),
-    email: Yup.string()
-      .nullable()
-      .transform((value) => (value === '' ? null : value))
-      .email(),
-    password: Yup.string()
-      .nullable()
-      .transform((value) => (value === '' ? null : value))
-      .min(6, 'Password length should be at least 4 characters')
-      .max(40, 'Password cannot exceed more than 12 characters'),
-    image: Yup.string()
-      .nullable()
-      .transform((value) => (value === '' ? null : value))
-      .url(),
-  }).test('1 of many field', (value) => !!(value.username || value.email || value.password || value.image))
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(formSchema),
+    resolver: yupResolver(profileSchema),
     mode: 'all',
   })
 
