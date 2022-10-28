@@ -6,12 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateArticleMutation } from '../redux/BlogAPI'
+import { getToken } from '../utils/StorageHandler'
 
 export function CreateArticlePage() {
   const [tagList, setTagList] = useState([])
   const [createArticle, { isError }] = useCreateArticleMutation()
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
+  const token = getToken()
 
   const formSchema = Yup.object({
     title: Yup.string().trim().required('Title is Required'),

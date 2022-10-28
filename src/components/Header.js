@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { cutText } from '../utils/CutText'
+import { getToken, removeToken } from '../utils/StorageHandler'
 
 export function Header({ userData }) {
   const navigate = useNavigate()
-  const token = localStorage.getItem('token')
+  const token = getToken()
   const img = 'https://static.productionready.io/images/smiley-cyrus.jpg'
   const [data, setData] = useState(null)
 
@@ -15,8 +16,8 @@ export function Header({ userData }) {
   }, [data, userData])
 
   const LogOutHandler = () => {
-    localStorage.removeItem('token')
-    navigate(-1)
+    removeToken()
+    navigate('/')
   }
   if (token) {
     return (

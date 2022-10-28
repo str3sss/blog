@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
 
 import { useLoginUserMutation } from '../redux/BlogAPI'
+import { getToken, setToken } from '../utils/StorageHandler'
 
 export function SignInPage() {
   const [loginUser, { isError }] = useLoginUserMutation()
   const navigate = useNavigate()
+  const token = getToken()
 
   const {
     register,
@@ -16,7 +18,7 @@ export function SignInPage() {
     mode: 'all',
   })
 
-  if (localStorage.getItem('token')) {
+  if (token) {
     return <Navigate to={'/'} replace />
   }
 
@@ -25,14 +27,14 @@ export function SignInPage() {
       await loginUser(data)
         .unwrap()
         .then((userData) => {
-          localStorage.setItem('token', userData.user.token)
+          setToken(userData.user.token)
           navigate('/', { replace: true })
         })
         .catch((e) => {
           console.error(e.data.errors, data)
         })
     } catch (e) {
-      console.log('error')
+      console.error(e)
     }
   }
 
@@ -58,6 +60,8 @@ export function SignInPage() {
       <label className="form__label">
         Password
         <input
+          type={'password'}
+          autoComplete={'password'}
           className="form__input"
           {...register('password', {
             required: 'The field is required',

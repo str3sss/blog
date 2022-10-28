@@ -6,10 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import { useEditArticleMutation, useGetArticleQuery } from '../redux/BlogAPI'
+import { getToken } from '../utils/StorageHandler'
 
 export function EditArticlePage({ userData }) {
   const slug = useParams().slug
-  const token = localStorage.getItem('token')
+  const token = getToken()
   const navigate = useNavigate()
   const [editArticle, { isError }] = useEditArticleMutation()
   const { data = [] } = useGetArticleQuery(slug)

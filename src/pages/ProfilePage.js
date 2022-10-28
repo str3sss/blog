@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
 
 import { useUpdateUserMutation } from '../redux/BlogAPI'
+import { getToken } from '../utils/StorageHandler'
 
 export function ProfilePage() {
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export function ProfilePage() {
       console.log('А так не надо')
     } else {
       try {
-        const token = localStorage.getItem('token')
+        const token = getToken()
         const result = await updateUser({ body: validatedData, token: token })
         if (!result.error) {
           navigate('/')

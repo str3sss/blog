@@ -1,28 +1,31 @@
-import { Pagination, Skeleton, Tag } from 'antd'
+import { Pagination, Tag } from 'antd'
 import { HeartOutlined } from '@ant-design/icons'
 import moment from 'moment'
 import classNames from 'classnames'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useGetArticlesQuery, useLikeArticleMutation, useUnlikeArticleMutation } from '../redux/BlogAPI'
 import { cutText } from '../utils/CutText'
+import { getToken } from '../utils/StorageHandler'
 
 export function BlogPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [likeArticle] = useLikeArticleMutation()
   const [unlikeArticle] = useUnlikeArticleMutation()
   const { data = [], isLoading } = useGetArticlesQuery(5 * (currentPage - 1))
-  const token = localStorage.getItem('token')
+  const navigate = useNavigate()
+  const token = getToken()
 
   if (isLoading) {
+    console.log('загрузка')
     return (
       <ul>
-        <Skeleton className="article" />
-        <Skeleton className="article" />
-        <Skeleton className="article" />
-        <Skeleton className="article" />
-        <Skeleton className="article" />
+        <div className="skeleton" />
+        <div className="skeleton" />
+        <div className="skeleton" />
+        <div className="skeleton" />
+        <div className="skeleton" />
       </ul>
     )
   }
@@ -31,13 +34,9 @@ export function BlogPage() {
 
   const likeHandler = (slug, favorited) => {
     if (!token) {
-      return null
+      navigate('/sign-in')
     }
-    if (favorited) {
-      unlikeArticle(slug, token)
-    } else {
-      likeArticle(slug, token)
-    }
+    favorited ? unlikeArticle(slug, token) : likeArticle(slug, token)
   }
 
   return (

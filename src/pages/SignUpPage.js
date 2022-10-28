@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useRegisterUserMutation } from '../redux/BlogAPI'
+import { setToken } from '../utils/StorageHandler'
 
 export function SignUpPage() {
   const [checked, setChecked] = useState(false)
@@ -45,7 +46,7 @@ export function SignUpPage() {
       await registerUser(data)
         .unwrap()
         .then((Userdata) => {
-          localStorage.setItem('token', Userdata.user.token)
+          setToken(Userdata.user.token)
           navigate('/', { replace: true })
         })
         .catch((error) => console.log(error))
@@ -69,12 +70,24 @@ export function SignUpPage() {
       <div>{errors?.email && <p>{errors?.email?.message || 'Error!'}</p>}</div>
       <label className="form__label">
         Password
-        <input className="form__input" placeholder="Password" {...register('password')} />
+        <input
+          className="form__input"
+          type={'password'}
+          autoComplete={'password'}
+          placeholder="Password"
+          {...register('password')}
+        />
       </label>
       <div>{errors?.password && <p>{errors?.password?.message || 'Error!'}</p>}</div>
       <label className="form__label">
         Repeat Password
-        <input className="form__input" placeholder="Password" {...register('cpassword')} />
+        <input
+          className="form__input"
+          type={'password'}
+          autoComplete={'repeat-password'}
+          placeholder="Password"
+          {...register('cpassword')}
+        />
       </label>
       <div>{errors?.cpassword && <p>{errors?.cpassword?.message}</p>}</div>
       {isError && (

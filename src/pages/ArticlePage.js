@@ -11,6 +11,7 @@ import {
   useUnlikeArticleMutation,
 } from '../redux/BlogAPI'
 import { cutText } from '../utils/CutText'
+import { getToken } from '../utils/StorageHandler'
 
 import { NotFoundPage } from './NotFoundPage'
 
@@ -22,7 +23,7 @@ export function ArticlePage({ userData }) {
   const [deleteArticle] = useDeleteArticleMutation()
   const navigate = useNavigate()
   const { data = [], isLoading, isError } = useGetArticleQuery(slug)
-  const token = localStorage.getItem('token')
+  const token = getToken()
   const article = data.article
 
   const showModal = () => {
@@ -56,13 +57,9 @@ export function ArticlePage({ userData }) {
 
   const likeHandler = (slug, favorited) => {
     if (!token) {
-      return null
+      navigate('/sign-in')
     }
-    if (favorited) {
-      unlikeArticle(slug, token)
-    } else {
-      likeArticle(slug, token)
-    }
+    favorited ? unlikeArticle(slug, token) : likeArticle(slug, token)
   }
 
   if (isError) {
@@ -70,7 +67,7 @@ export function ArticlePage({ userData }) {
   }
 
   if (isLoading) {
-    return null
+    return <div className="skeleton-xl" />
   }
 
   return (

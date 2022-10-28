@@ -9,11 +9,12 @@ import { Layout } from './components/Layout'
 import { ProfilePage } from './pages/ProfilePage'
 import { CreateArticlePage } from './pages/CreateArticlePage'
 import { EditArticlePage } from './pages/EditArticlePage'
-import RequireAuth from './hoc/RequireAuth'
+import Guard from './hoc/Guard'
 import { useGetUserQuery } from './redux/BlogAPI'
+import { getToken } from './utils/StorageHandler'
 
 function App() {
-  const token = localStorage.getItem('token')
+  const token = getToken()
   const { data = [] } = useGetUserQuery(token)
 
   return (
@@ -25,17 +26,17 @@ function App() {
         <Route
           path="new-article"
           element={
-            <RequireAuth>
+            <Guard>
               <CreateArticlePage />
-            </RequireAuth>
+            </Guard>
           }
         />
         <Route
           path="/articles/:slug/edit"
           element={
-            <RequireAuth>
+            <Guard>
               <EditArticlePage userData={data?.user} />
-            </RequireAuth>
+            </Guard>
           }
         />
         <Route path="sign-up" element={<SignUpPage />}></Route>
@@ -43,9 +44,9 @@ function App() {
         <Route
           path="profile"
           element={
-            <RequireAuth>
+            <Guard>
               <ProfilePage />
-            </RequireAuth>
+            </Guard>
           }
         />
         <Route path="*" element={<NotFoundPage />}></Route>

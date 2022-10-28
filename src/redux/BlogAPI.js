@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+import { getToken } from '../utils/StorageHandler'
+
 export const BlogAPI = createApi({
   reducerPath: 'BlogAPI',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://blog.kata.academy/api/',
     prepareHeaders: (headers) => {
-      const token = window.localStorage.getItem('token')
+      const token = getToken()
 
       if (token) {
         headers.set('Authorization', `Token ${token}`)
