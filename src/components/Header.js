@@ -8,7 +8,6 @@ import { getToken, removeToken } from '../utils/StorageHandler'
 export function Header({ userData }) {
   const navigate = useNavigate()
   const token = getToken()
-  const img = 'https://static.productionready.io/images/smiley-cyrus.jpg'
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export function Header({ userData }) {
               {data && (
                 <>
                   <div className="profile__username h6">{cutText(data?.username)}</div>
-                  <img className="profile__avatar" src={data?.image || img} />
+                  <img className="profile__avatar" src={data?.image} />
                 </>
               )}
             </div>
